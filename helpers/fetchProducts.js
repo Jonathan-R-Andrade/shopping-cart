@@ -4,8 +4,7 @@ const fetchProducts = async (search) => {
     const response = await fetch(url);
     const data = await response.json();
     return data;
-  }
-  catch (error) {
+  } catch (error) {
     return error;
   }
 };
