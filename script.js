@@ -1,3 +1,5 @@
+const cartItems = document.querySelector('.cart__items');
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -17,9 +19,9 @@ function getSkuFromProductItem(item) {
 }
 
 function calculateTotalPrice() {
-  const cartItems = document.querySelectorAll('.cart__item');
+  const allCartItems = document.querySelectorAll('.cart__item');
   let totalPrice = Array
-    .from(cartItems)
+    .from(allCartItems)
     .reduce((total, item) => {
       const itemPrice = item.querySelector('.item__price').textContent;
       return Number(itemPrice) + total;
@@ -43,7 +45,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-function addItemInTheCartClickListener(event) {
+function addItemInTheCart(event) {
   const itemID = getSkuFromProductItem(event.target.parentElement);
 
   const itemPromise = fetchItem(itemID);
@@ -54,7 +56,6 @@ function addItemInTheCartClickListener(event) {
       salePrice: item.price,
     };
     const itemElemetn = createCartItemElement(itemInfo);
-    const cartItems = document.querySelector('.cart__items');
     cartItems.appendChild(itemElemetn);
     saveCartItems(cartItems.innerHTML);
     calculateTotalPrice();
@@ -69,14 +70,13 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   const btnItemAdd = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
-  btnItemAdd.addEventListener('click', addItemInTheCartClickListener);
+  btnItemAdd.addEventListener('click', addItemInTheCart);
   section.appendChild(btnItemAdd);
 
   return section;
 }
 
 function fillItemsCart() {
-  const cartItems = document.querySelector('.cart__items');
   cartItems.innerHTML = getSavedCartItems();
   const items = cartItems.getElementsByTagName('li');
   Array.from(items).forEach((item) => {
@@ -114,7 +114,16 @@ function showItemsSearched() {
   });
 }
 
+function emptyCart() {
+  const totalPrice = document.querySelector('.total-price');
+  cartItems.innerHTML = '';
+  totalPrice.innerHTML = '0';
+  saveCartItems(cartItems.innerHTML);
+}
+
 window.onload = () => {
+  document.querySelector('.empty-cart')
+    .addEventListener('click', emptyCart);
   fillItemsCart();
   showItemsSearched();
 };

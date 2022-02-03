@@ -166,4 +166,5 @@ body {
   border: 2px solid rgb(5, 52, 219);
   background-color: rgb(249, 249, 246);
   border-radius: 10px;
+  cursor: pointer;
 }
