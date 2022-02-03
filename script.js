@@ -28,15 +28,29 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+function calculateTotalPrice() {
+  const cartItems = document.querySelectorAll('.cart__item');
+  let totalPrice = Array
+    .from(cartItems)
+    .reduce((total, item) => {
+      const itemPrice = item.querySelector('.item__price').textContent;
+      return Number(itemPrice) + total;
+    }, 0);
+  totalPrice = totalPrice.toFixed(2);
+  document.querySelector('.total-price').textContent = Number(totalPrice);
+}
+
 function cartItemClickListener(event) {
   event.target.remove();
   saveCartItems(event.path[1].innerHTML);
+  calculateTotalPrice();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  const itemPrice = `<span class="item__price">${salePrice}</span>`;
+  li.innerHTML = `SKU: ${sku} | NAME: ${name} | PRICE: $${itemPrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
@@ -55,19 +69,21 @@ function addItemInTheCartClickListener(event) {
     const cartItems = document.querySelector('.cart__items');
     cartItems.appendChild(itemElemetn);
     saveCartItems(cartItems.innerHTML);
+    calculateTotalPrice();
   });
 }
 
-const fillItemsCart = () => {
+function fillItemsCart() {
   const cartItems = document.querySelector('.cart__items');
   cartItems.innerHTML = getSavedCartItems();
   const items = cartItems.getElementsByTagName('li');
   Array.from(items).forEach((item) => {
     item.addEventListener('click', cartItemClickListener);
   });
-};
+  calculateTotalPrice();
+}
 
-const showItemsSearched = () => {
+function showItemsSearched() {
   const itemsContainer = document.querySelector('.items');
   const productsPromise = fetchProducts('computador');
   productsPromise.then(({ results }) => {
@@ -84,7 +100,7 @@ const showItemsSearched = () => {
       itemsContainer.appendChild(productElement);
     });
   });
-};
+}
 
 window.onload = () => {
   fillItemsCart();

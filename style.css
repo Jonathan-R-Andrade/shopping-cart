@@ -148,10 +148,18 @@ body {
   cursor: pointer;
 }
 
+.items__price {
+  padding: 5px;
+  margin: 5px auto;
+  border: 2px solid rgb(5, 52, 219);
+  border-radius: 10px;
+}
+
 .empty-cart {
   width: 170px;
   height: 35px;
   margin: 0 auto;
   border: 2px solid rgb(5, 52, 219);
   background-color: rgb(249, 249, 246);
+  border-radius: 10px;
 }
