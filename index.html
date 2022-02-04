@@ -21,10 +21,14 @@
 <body>
   <header class="header">
     <div class="container-title">
-      <span class="title"><strong>trybe</strong>shopping</span>
+      <a href="" class="title"><strong>trybe</strong>shopping</a>
     </div>
-    <i class="material-icons" style="font-size:45px;color:white">shopping_cart</i>
+    <label for="search_product" class="search_product_label">
+      <input type="text" id="search_product" placeholder="Buscar">
+      <img src="./icon/search_black_24dp.svg" alt="Ícone de lupa" id="icon-search">
+    </label>
     <div class="container-cartTitle">
+      <i class="material-icons" style="font-size:45px;color:white">shopping_cart</i>
       <span class="cart__title">Meu carrinho</span>
     </div>
   </header>
@@ -33,7 +37,7 @@
     <section class="cart">
       <ol class="cart__items"></ol>
       <div class="items__price">
-        Total $: <span class="total-price">0</span>
+        Total R$ <span class="total-price">0</span>
       </div>
       <button class="empty-cart">Esvaziar carrinho</button>
     </section>
