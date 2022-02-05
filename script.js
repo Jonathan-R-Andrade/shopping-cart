@@ -124,7 +124,7 @@ function emptyCart() {
 
 function searchProducts() {
   const input = document.getElementById('search_product');
-  if (input.value.length > 0) showItemsSearched(input.value);
+  if (input.value.length > 0) showItemsSearched(input.value);;
 }
 
 function addSearchClickEvent() {
@@ -136,10 +136,21 @@ function addSearchClickEvent() {
     .addEventListener('click', searchProducts);
 }
 
+function showCartItems() {
+  document.querySelector('.cart__title')
+    .classList.toggle('cart__title-open');
+  document.querySelector('.container-cartTitle')
+    .classList.toggle('container-cartTitle-open');
+  document.querySelector('.cart')
+    .classList.toggle('cart-open');
+}
+
 window.onload = () => {
   addSearchClickEvent();
   document.querySelector('.empty-cart')
     .addEventListener('click', emptyCart);
+  document.querySelector('.material-icons')
+    .addEventListener('click', showCartItems);
   fillItemsCart();
   showItemsSearched('computador');
 };

@@ -7,10 +7,12 @@
 
 body {
   background-color: rgb(246, 246, 246);
+  padding-top: 60px;
 }
 
 .header {
-  position: relative;
+  position: fixed;
+  top: 0;
   background-color: rgb(3, 52, 45);
   display: flex;
   justify-content: space-between;
@@ -34,6 +36,7 @@ body {
   margin: 0 10px;
   flex-grow: 1;
   border-radius: 10px;
+  max-width: 700px;
 }
 
 .search_product_label:focus-within {
@@ -68,11 +71,15 @@ body {
   align-items: center;
   justify-content: center;
   background-color: rgb(10, 118, 79);
-  width: 31.5%;
-  min-width: 160px;
+  width: 65px;
   height: 100%;
   margin-left: 10px;
   padding: 0 10px;
+  transition: width 500ms linear;
+}
+
+.container-cartTitle-open {
+  width: 400px;
 }
 
 .container-cartTitle:before {
@@ -85,6 +92,20 @@ body {
   background: rgb(10, 118, 79);
   transform: translateX(-50%) rotateZ(45deg);
   z-index: 0;
+  transition: background-color 500ms linear;
+}
+
+.container-cartTitle-open:before {
+  background-color: rgb(3, 52, 45);
+}
+
+.container-cartTitle .material-icons {
+  user-select: none;
+  cursor: pointer;
+}
+
+.container-cartTitle .material-icons:active {
+  transform: rotateZ(-15deg);
 }
 
 .container-cartTitle .cart__title {
@@ -92,12 +113,17 @@ body {
   font-size: 20px;
   font-weight: 700;
   text-align: center;
+  overflow: hidden;
+  width: 0;
+  padding: 0;
+}
+
+.container-cartTitle .cart__title-open {
+  width: fit-content;
   padding: 10px;
 }
 
 .container {
-  display: flex;
-  justify-content: space-around;
   width: 100%;
 }
 
@@ -107,16 +133,19 @@ body {
 
 .items {
   display: flex;
-  flex-basis: 70%;
   flex-wrap: wrap;
   justify-content: center;
   margin: 40px 0;
+  transition: padding-right 500ms linear;
+}
+
+.cart-open ~ .items {
+  padding-right: 400px;
 }
 
 .item {
   display: flex;
   flex-direction: column;
-  height: auto;
   margin: 5px;
   width: 200px;
   border: 2px solid rgb(234, 234, 233);
@@ -150,11 +179,24 @@ body {
 }
 
 .cart {
+  position: fixed;
+  top: 60px;
+  right: -335px;
   display: flex;
-  flex-basis: 32%;
   flex-flow: column wrap;
   background-color: rgb(241, 241, 238);
-  height: 100vh;
+  height: calc(100vh - 60px);
+  width: 400px;
+  transition: right 500ms linear, opacity 0s 500ms;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cart-open {
+  transition: right 500ms linear, opacity 0s 0s;
+  opacity: 1;
+  pointer-events: all;
+  right: 0;
 }
 
 .cart .cart__items {
