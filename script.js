@@ -39,11 +39,11 @@ function cartItemClickListener(event) {
   calculateTotalPrice();
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
+function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  const itemPrice = `<span class="item__price">${salePrice}</span>`;
-  li.innerHTML = `SKU: ${sku} | NAME: ${name} | PRICE: $${itemPrice}`;
+  const itemPrice = `<span class="item__price">${price}</span>`;
+  li.innerHTML = `SKU: ${id} | NAME: ${title} | PRICE: $${itemPrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
@@ -53,13 +53,7 @@ function addItemInTheCart(event) {
 
   const itemPromise = fetchItem(itemID);
   itemPromise.then((item) => {
-    console.log(item);
-    const itemInfo = {
-      sku: item.id,
-      name: item.title,
-      salePrice: item.price,
-    };
-    const itemElemetn = createCartItemElement(itemInfo);
+    const itemElemetn = createCartItemElement(item);
     cartItems.appendChild(itemElemetn);
     saveCartItems(cartItems.innerHTML);
     calculateTotalPrice();
@@ -140,15 +134,8 @@ function showItemsSearched(search) {
   addLoading();
   const itemsPromise = fetchItems(search);
   itemsPromise.then((items) => {
-    console.log(items);
     removeLoading();
     items.forEach((item) => {
-      const productInfo = {
-        sku: item.id,
-        name: item.title,
-        image: item.pictures[0].url,
-        price: item.price
-      };
       itemsContainer.appendChild(createProductItemElement(item));
     });
   });

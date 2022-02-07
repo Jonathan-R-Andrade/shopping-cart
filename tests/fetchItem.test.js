@@ -19,8 +19,12 @@ describe('2 - Teste a função fecthItem', () => {
     const receivedItem = await fetchItem('MLB1615760527');
     expect(receivedItem).toEqual(item);
   });
-  test('Deve retornar um erro com a mensagem "You must provide an url"', async () => {
-    const receivedItem = await fetchItem();
-    expect(receivedItem).toEqual(new Error('You must provide an url'));
+  test('Deve lançar uma exceção com a mensagem "You must provide an url"', async () => {
+    try {
+      await fetchItem();
+      fail('Deveria lançar uma exceção.');
+    } catch (error) {
+      expect(error).toEqual(new Error('You must provide an url'));
+    }
   });
 });

@@ -19,8 +19,12 @@ describe('1 - Teste a função fecthProducts', () => {
     const products = await fetchProducts('computador');
     expect(products).toEqual(computadorSearch);
   });
-  test('Deve retornar um erro com a mensagem "You must provide an url"', async () => {
-    const products = await fetchProducts();
-    expect(products).toEqual(new Error('You must provide an url'));
+  test('Deve lançar uma exceção com a mensagem "You must provide an url"', async () => {
+    try {
+      await fetchProducts();
+      fail('Deveria lançar uma exceção.');
+    } catch (error) {
+      expect(error).toEqual(new Error('You must provide an url'));
+    }
   });
 });
