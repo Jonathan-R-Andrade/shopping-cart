@@ -1,4 +1,5 @@
 const cartItems = document.querySelector('.cart__items');
+cartItems.addEventListener('click', cartItemClickListener);
 
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
@@ -21,42 +22,57 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-function calculateTotalPrice() {
-  const allCartItems = document.querySelectorAll('.cart__item');
-  let totalPrice = Array
-    .from(allCartItems)
-    .reduce((total, item) => {
-      const itemPrice = item.querySelector('.item__price').textContent;
-      return Number(itemPrice) + total;
-    }, 0);
-  totalPrice = totalPrice.toFixed(2);
-  document.querySelector('.total-price').textContent = Number(totalPrice);
+function updateTotalPrice() {
+  const cart = cart_Get();
+  document.querySelector('.total-price').textContent = cart.totalPrice;
 }
 
 function cartItemClickListener(event) {
-  event.target.remove();
-  saveCartItems(event.path[1].innerHTML);
-  calculateTotalPrice();
+  if (event.target.classList.contains('item__remove')) {
+    const item = event.path[1];
+    const cart = cart_Get();
+    const itemInCart = cart_RemoveItem(item.id, cart, 1);
+    if (itemInCart) {
+      updateQuantityCartItem(item.id, itemInCart.quantity);
+    } else {
+      item.remove();
+    }
+    cart_Save(cart);
+    updateTotalPrice();
+  }
 }
 
-function createCartItemElement({ id, title, price }) {
+function updateQuantityCartItem(id, quantity) {
+  const item = document.querySelector(`#${id}`);
+  const itemQuantity = item.querySelector('.item__quantity');
+  itemQuantity.innerHTML = quantity;
+}
+
+function createCartItemElement({ id, title, price }, quantity) {
   const li = document.createElement('li');
+  li.id = `${id}`;
   li.className = 'cart__item';
   const itemPrice = `<span class="item__price">${price}</span>`;
-  li.innerHTML = `SKU: ${id} | NAME: ${title} | PRICE: $${itemPrice}`;
-  li.addEventListener('click', cartItemClickListener);
+  const itemQuantity = `<span class="item__quantity">${quantity}</span>`;
+  const itemRemove = '<div class="item__remove">|| REMOVER ||</div>'
+  li.innerHTML = `SKU: ${id} | NAME: ${title} | PRICE: $${itemPrice} | QUANTITY: ${itemQuantity} ${itemRemove}`;
   return li;
 }
 
 function addItemInTheCart(event) {
   const itemID = getSkuFromProductItem(event.target.parentElement);
-
   const itemPromise = fetchItem(itemID);
   itemPromise.then((item) => {
-    const itemElemetn = createCartItemElement(item);
-    cartItems.appendChild(itemElemetn);
-    saveCartItems(cartItems.innerHTML);
-    calculateTotalPrice();
+    const cart = cart_Get();
+    const itemInCart = cart_AddItem(item, cart, 1);
+    cart_Save(cart);
+    if (itemInCart.quantity > 1) {
+      updateQuantityCartItem(itemInCart.item.id, itemInCart.quantity);
+    } else {
+      const itemElemetn = createCartItemElement(itemInCart.item, 1);
+      cartItems.appendChild(itemElemetn);
+    }
+    updateTotalPrice();
   });
 }
 
@@ -95,17 +111,16 @@ function createProductItemElement({ id, title, pictures, price }) {
   const btnItemAdd = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
   btnItemAdd.addEventListener('click', addItemInTheCart);
   section.appendChild(btnItemAdd);
-
   return section;
 }
 
 function fillItemsCart() {
-  cartItems.innerHTML = getSavedCartItems();
-  const items = cartItems.getElementsByTagName('li');
-  Array.from(items).forEach((item) => {
-    item.addEventListener('click', cartItemClickListener);
+  const cart = cart_Get();
+  cart.items.forEach((item) => {
+    const itemElemetn = createCartItemElement(item.item, item.quantity);
+    cartItems.appendChild(itemElemetn);
   });
-  calculateTotalPrice();
+  updateTotalPrice();
 }
 
 function addLoading() {
@@ -145,7 +160,7 @@ function emptyCart() {
   const totalPrice = document.querySelector('.total-price');
   cartItems.innerHTML = '';
   totalPrice.innerHTML = '0';
-  saveCartItems(cartItems.innerHTML);
+  cart_Save(cart_CreateCart());
 }
 
 function searchProducts() {

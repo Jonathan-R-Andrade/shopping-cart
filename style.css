@@ -255,10 +255,6 @@ body {
   cursor: pointer;
 }
 
-.cart__item * {
-  pointer-events: none;
-}
-
 .items__price {
   padding: 5px;
   margin: 5px auto;
