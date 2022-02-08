@@ -92,7 +92,7 @@ function createPriceContainer(price, className) {
   const priceSeparated = String(price).split('.');
   const priceInteger = thousandsSeparator(priceSeparated[0]);
   let priceCents = priceSeparated[1];
-  priceCents = (priceCents) ? `00${priceCents}`.slice(-2) : '00';
+  priceCents = (priceCents) ? `${priceCents}00`.slice(0,2) : '00';
 
   const priceContainer = createCustomElement('div', `${className}__container`, '');
   priceContainer.appendChild(createCustomElement('span', `${className}__symbol`, 'R$'));
