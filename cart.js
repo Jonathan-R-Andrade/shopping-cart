@@ -46,7 +46,6 @@ function cart_AddItem(itemToAdd, cart, quantity) {
   cart.totalPrice += priceToAdd;
   cart.totalPrice = Number(cart.totalPrice.toFixed(2));
   foundItem.totalPrice = Number(foundItem.totalPrice.toFixed(2));
-  console.log(foundItem.totalPrice);
   return foundItem;
 }
 

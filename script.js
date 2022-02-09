@@ -24,12 +24,13 @@ function getSkuFromProductItem(item) {
 
 function updateTotalPrice() {
   const cart = cart_Get();
-  document.querySelector('.total-price').textContent = cart.totalPrice;
+  const totalPrice = document.querySelector('.total-price__container');
+  totalPrice.outerHTML = createPriceContainer(cart.totalPrice, 'total-price').outerHTML;
 }
 
 function cartItemClickListener(event) {
-  if (event.target.classList.contains('item__remove')) {
-    const item = event.path[1];
+  if (event.target.classList.contains('cart__item__delete')) {
+    const item = event.path[2];
     const cart = cart_Get();
     const itemInCart = cart_RemoveItem(item.id, cart, 1);
     if (itemInCart) {
@@ -42,23 +43,42 @@ function cartItemClickListener(event) {
   }
 }
 
+function createCartItemQuantityElement(quantity) {
+  const itemQuantityContainer = createCustomElement('span', 'item__quantity__container', '');
+  const itemQuantity = createCustomElement('span', 'item__quantity', quantity);
+  const itemQuantityText = createCustomElement('span', 'item__quantity-text', '');
+  itemQuantityText.innerHTML = (quantity > 1) ? 'itens' : 'item';
+  itemQuantityContainer.appendChild(itemQuantity);
+  itemQuantityContainer.appendChild(itemQuantityText);
+  return itemQuantityContainer;
+}
+
 function updateCartItem(item) {
   const itemElement = document.querySelector(`#${item.item.id}`);
-  const itemQuantity = itemElement.querySelector('.item__quantity');
-  itemQuantity.innerHTML = item.quantity;
-  const itemPrice = itemElement.querySelector('.item__price');
-  itemPrice.innerHTML = item.totalPrice;
+  const itemQuantity = itemElement.querySelector('.item__quantity__container');
+  itemQuantity.outerHTML = createCartItemQuantityElement(item.quantity).outerHTML;
+  const itemPrice = itemElement.querySelector('.item__price__container');
+  itemPrice.outerHTML = createPriceContainer(item.totalPrice, 'item__price').outerHTML;
 }
 
 function createCartItemElement(item) {
   const li = document.createElement('li');
-  const { id, title } = item.item;
+  const { id, title, thumbnail } = item.item;
   li.id = `${id}`;
   li.className = 'cart__item';
-  const itemPrice = `<span class="item__price">${item.totalPrice}</span>`;
-  const itemQuantity = `<span class="item__quantity">${item.quantity}</span>`;
-  const itemRemove = '<div class="item__remove">|| REMOVER ||</div>'
-  li.innerHTML = `SKU: ${id} | NAME: ${title} | PRICE: $${itemPrice} | QUANTITY: ${itemQuantity} ${itemRemove}`;
+
+  const itemMain = createCustomElement('div', 'cart__item__main', '');
+  const img = createCustomElement('img', 'cart__item__thumbnail', '');
+  const itemRemove = createCustomElement('i', 'cart__item__delete material-icons', 'delete');
+  img.src = thumbnail;
+  itemMain.innerHTML = `${img.outerHTML}${itemRemove.outerHTML}${title}`;
+  li.appendChild(itemMain);
+
+  const itemInfo = createCustomElement('div', 'cart__item__info', '');
+  const itemPrice = createPriceContainer(item.totalPrice, 'item__price');
+  itemInfo.appendChild(itemPrice);
+  itemInfo.appendChild(createCartItemQuantityElement(item.quantity));
+  li.appendChild(itemInfo);
   return li;
 }
 
@@ -97,7 +117,7 @@ function createPriceContainer(price, className) {
   let priceCents = priceSeparated[1];
   priceCents = (priceCents) ? `${priceCents}00`.slice(0, 2) : '00';
 
-  const priceContainer = createCustomElement('div', `${className}__container`, '');
+  const priceContainer = createCustomElement('span', `${className}__container`, '');
   priceContainer.appendChild(createCustomElement('span', `${className}__symbol`, 'R$'));
   priceContainer.appendChild(createCustomElement('span', `${className}__integer`, priceInteger));
   priceContainer.appendChild(createCustomElement('span', `${className}__decimal_separator`, ','));
@@ -160,10 +180,10 @@ function showItemsSearched(search) {
 }
 
 function emptyCart() {
-  const totalPrice = document.querySelector('.total-price');
-  cartItems.innerHTML = '';
-  totalPrice.innerHTML = '0';
+  const totalPrice = document.querySelector('.total-price__container');
+  totalPrice.outerHTML = createPriceContainer(0, 'total-price').outerHTML;
   cart_Save(cart_CreateCart());
+  cartItems.innerHTML = '';
 }
 
 function searchProducts() {
@@ -193,7 +213,7 @@ window.onload = () => {
   addSearchClickEvent();
   document.querySelector('.empty-cart')
     .addEventListener('click', emptyCart);
-  document.querySelector('.material-icons')
+  document.querySelector('.material-icons.cart-icon')
     .addEventListener('click', showCartItems);
   fillItemsCart();
   showItemsSearched('computador');

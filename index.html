@@ -26,10 +26,10 @@
     </div>
     <label for="search_product" class="search_product_label">
       <input type="text" id="search_product" placeholder="Buscar">
-      <img src="./icon/search_black.svg" alt="Ícone de lupa" id="icon-search">
+      <i id="icon-search" class="material-icons">search</i>
     </label>
     <div class="container-cartTitle">
-      <i class="material-icons" style="font-size:45px;color:white">shopping_cart</i>
+      <i class="material-icons cart-icon">shopping_cart</i>
       <span class="cart__title">Meu carrinho</span>
     </div>
   </header>
@@ -37,9 +37,9 @@
     <section class="cart">
       <ol class="cart__items"></ol>
       <div class="items__price">
-        Total R$ <span class="total-price">0</span>
+        Total <span class="total-price__container"></span>
       </div>
-      <button class="empty-cart">Esvaziar carrinho</button>
+      <button class="empty-cart">Esvaziar carrinho<i class="material-icons md-18 empty-icon">delete_forever</i></button>
     </section>
     <section class="items"></section>
   </section>
