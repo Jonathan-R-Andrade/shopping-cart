@@ -33,7 +33,7 @@ function cartItemClickListener(event) {
     const cart = cart_Get();
     const itemInCart = cart_RemoveItem(item.id, cart, 1);
     if (itemInCart) {
-      updateQuantityCartItem(item.id, itemInCart.quantity);
+      updateCartItem(itemInCart);
     } else {
       item.remove();
     }
@@ -42,18 +42,21 @@ function cartItemClickListener(event) {
   }
 }
 
-function updateQuantityCartItem(id, quantity) {
-  const item = document.querySelector(`#${id}`);
-  const itemQuantity = item.querySelector('.item__quantity');
-  itemQuantity.innerHTML = quantity;
+function updateCartItem(item) {
+  const itemElement = document.querySelector(`#${item.item.id}`);
+  const itemQuantity = itemElement.querySelector('.item__quantity');
+  itemQuantity.innerHTML = item.quantity;
+  const itemPrice = itemElement.querySelector('.item__price');
+  itemPrice.innerHTML = item.totalPrice;
 }
 
-function createCartItemElement({ id, title, price }, quantity) {
+function createCartItemElement(item) {
   const li = document.createElement('li');
+  const { id, title } = item.item;
   li.id = `${id}`;
   li.className = 'cart__item';
-  const itemPrice = `<span class="item__price">${price}</span>`;
-  const itemQuantity = `<span class="item__quantity">${quantity}</span>`;
+  const itemPrice = `<span class="item__price">${item.totalPrice}</span>`;
+  const itemQuantity = `<span class="item__quantity">${item.quantity}</span>`;
   const itemRemove = '<div class="item__remove">|| REMOVER ||</div>'
   li.innerHTML = `SKU: ${id} | NAME: ${title} | PRICE: $${itemPrice} | QUANTITY: ${itemQuantity} ${itemRemove}`;
   return li;
@@ -67,9 +70,9 @@ function addItemInTheCart(event) {
     const itemInCart = cart_AddItem(item, cart, 1);
     cart_Save(cart);
     if (itemInCart.quantity > 1) {
-      updateQuantityCartItem(itemInCart.item.id, itemInCart.quantity);
+      updateCartItem(itemInCart);
     } else {
-      const itemElemetn = createCartItemElement(itemInCart.item, 1);
+      const itemElemetn = createCartItemElement(itemInCart);
       cartItems.appendChild(itemElemetn);
     }
     updateTotalPrice();
@@ -92,7 +95,7 @@ function createPriceContainer(price, className) {
   const priceSeparated = String(price).split('.');
   const priceInteger = thousandsSeparator(priceSeparated[0]);
   let priceCents = priceSeparated[1];
-  priceCents = (priceCents) ? `${priceCents}00`.slice(0,2) : '00';
+  priceCents = (priceCents) ? `${priceCents}00`.slice(0, 2) : '00';
 
   const priceContainer = createCustomElement('div', `${className}__container`, '');
   priceContainer.appendChild(createCustomElement('span', `${className}__symbol`, 'R$'));
@@ -117,7 +120,7 @@ function createProductItemElement({ id, title, pictures, price }) {
 function fillItemsCart() {
   const cart = cart_Get();
   cart.items.forEach((item) => {
-    const itemElemetn = createCartItemElement(item.item, item.quantity);
+    const itemElemetn = createCartItemElement(item);
     cartItems.appendChild(itemElemetn);
   });
   updateTotalPrice();
