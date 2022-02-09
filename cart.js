@@ -34,14 +34,14 @@ function cart_Get() {
 function cart_AddItem(itemToAdd, cart, quantity) {
   const { items } = cart;
   let foundItem = items.find(({ item }) => item.id === itemToAdd.id);
-  if (foundItem !== undefined) {
+  if (foundItem) {
     foundItem.quantity += quantity;
   } else {
     const newItem = cart_CreateItem(itemToAdd, quantity);
     items.push(newItem);
     foundItem = newItem;
   }
-  cart.totalPrice += itemToAdd.price;
+  cart.totalPrice += itemToAdd.price * quantity;
   cart.totalPrice = Number(cart.totalPrice.toFixed(2));
   return foundItem;
 }
