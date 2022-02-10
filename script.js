@@ -30,7 +30,7 @@ function updateTotalPrice() {
 
 function cartItemClickListener(event) {
   if (event.target.classList.contains('cart__item__delete')) {
-    const item = event.path[2];
+    const item = event.target.parentElement.parentElement;
     const cart = cart_Get();
     const itemInCart = cart_RemoveItem(item.id, cart, 1);
     if (itemInCart) {
