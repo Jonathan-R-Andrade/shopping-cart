@@ -1,5 +1,5 @@
 function cart_CreateCart() {
-  return { items: [], totalPrice: 0 };
+  return { items: [], totalPrice: 0, itemsTotal: 0 };
 }
 
 function cart_CreateItem(item, quantity, totalPrice) {
@@ -43,6 +43,7 @@ function cart_AddItem(itemToAdd, cart, quantity) {
     items.push(newItem);
     foundItem = newItem;
   }
+  cart.itemsTotal += quantity;
   cart.totalPrice += priceToAdd;
   cart.totalPrice = Number(cart.totalPrice.toFixed(2));
   foundItem.totalPrice = Number(foundItem.totalPrice.toFixed(2));
@@ -63,6 +64,7 @@ function cart_RemoveItem(id, cart, quantity) {
       foundItem.totalPrice -= foundItem.item.price * quantity;
       foundItem.totalPrice = Number(foundItem.totalPrice.toFixed(2));
     }
+    cart.itemsTotal -= quantity;
     cart.totalPrice = Number(cart.totalPrice.toFixed(2));
   }
   return foundItem;
