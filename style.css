@@ -64,11 +64,6 @@ body {
   padding: 0;
 }
 
-.material-icons.cart-icon {
-  font-size: 45px;
-  color: white;
-}
-
 .container-cartTitle {
   position: relative;
   display: flex;
@@ -106,6 +101,8 @@ body {
 .container-cartTitle .material-icons.cart-icon {
   user-select: none;
   cursor: pointer;
+  font-size: 45px;
+  color: white;
 }
 
 .container-cartTitle .material-icons.cart-icon:active {
@@ -229,10 +226,11 @@ body {
   top: 60px;
   right: -335px;
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   background-color: rgb(241, 241, 238);
   height: calc(100vh - 60px);
   width: 400px;
+  max-width: 400px;
   transition: right 500ms linear, opacity 0s 500ms;
   opacity: 0;
   pointer-events: none;
@@ -276,13 +274,14 @@ body {
   border-radius: 10px;
 }
 
-.cart__item__delete {
+.cart__item__delete.material-icons {
   float: right;
   margin-left: 10px;
   margin-bottom: 10px;
   user-select: none;
   cursor: pointer;
   color: rgb(190, 30, 30);
+  font-size: 28px;
 }
 
 .cart__item__info {
@@ -290,6 +289,10 @@ body {
   font-size: 20px;
   font-weight: 500;
   text-align: center;
+}
+
+.cart__item__info > * {
+  display: inline-block;
 }
 
 .item__quantity {
@@ -301,6 +304,7 @@ body {
   margin: 10px auto 0;
   border-radius: 10px;
   font-size: 22px;
+  text-align: center;
 }
 
 .items__price .total-price__symbol {
@@ -310,7 +314,8 @@ body {
 .empty-cart {
   display: flex;
   align-items: center;
-  height: 35px;
+  flex-wrap: wrap;
+  min-height: 35px;
   padding: 5px;
   margin: 10px auto;
   border: 0;
@@ -331,4 +336,43 @@ body {
 
 .material-icons.md-18.empty-icon {
   font-size: 22px;
+  margin: auto;
+}
+
+@media screen and (max-width: 991px) {
+  .title {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .cart-open ~ .items {
+    padding-right: 0;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .container-cartTitle {
+    width: 60px;
+  }
+
+  .container-cartTitle .material-icons.cart-icon {
+    font-size: 40px;
+  }
+
+  .cart__title {
+    display: none;
+  }
+
+  .item {
+    width: 180px;
+  }
+
+  .cart {
+    width: 100%;
+  }
+
+  .cart__item__delete.material-icons {
+    font-size: 32px;
+  }
 }
