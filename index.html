@@ -35,11 +35,18 @@
   </header>
   <section class="container">
     <section class="cart">
-      <ol class="cart__items"></ol>
-      <div class="items__price">
-        Total <span class="total-price__container"></span>
+      <div class="cart__items__container">
+        <ol class="cart__items"></ol>
+        <div class="items__price">
+          Total <span class="total-price__container"></span>
+        </div>
+        <button class="empty-cart">Esvaziar carrinho<i class="material-icons empty-icon">delete_forever</i></button>
       </div>
-      <button class="empty-cart">Esvaziar carrinho<i class="material-icons md-18 empty-icon">delete_forever</i></button>
+      <div class="empty__cart__message__container">
+        Seu carrinho está vazio
+        <i class="material-icons md-48">sentiment_dissatisfied</i>
+        <i class="material-icons md-48 empty__cart">remove_shopping_cart</i>
+      </div>
     </section>
     <section class="items"></section>
   </section>

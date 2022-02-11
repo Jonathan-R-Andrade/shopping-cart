@@ -22,9 +22,34 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+function updateItemsTotalInTheIcon(cart) {
+  const totalItems = document.querySelector('.cart-icon-items-total');
+  if (cart.itemsTotal > 99) {
+    totalItems.textContent = '99+';
+  } else if (cart.itemsTotal < 1) {
+    totalItems.textContent = '';
+  } else {
+    totalItems.textContent = cart.itemsTotal;
+  }
+}
+
 function updateTotalPrice(cart) {
   const totalPrice = document.querySelector('.total-price__container');
   totalPrice.outerHTML = createPriceContainer(cart.totalPrice, 'total-price').outerHTML;
+}
+
+function changeEmptyCartMessage(cart) {
+  if (cart.itemsTotal > 0) {
+    document.querySelector('.cart__items__container')
+      .style.display = 'flex';
+    document.querySelector('.empty__cart__message__container')
+      .style.display = 'none';
+  } else {
+    document.querySelector('.cart__items__container')
+      .style.display = 'none';
+    document.querySelector('.empty__cart__message__container')
+      .style.display = 'flex';
+  }
 }
 
 function removeItemInTheCart(event) {
@@ -40,6 +65,7 @@ function removeItemInTheCart(event) {
     cart_Save(cart);
     updateItemsTotalInTheIcon(cart);
     updateTotalPrice(cart);
+    changeEmptyCartMessage(cart);
   }
 }
 
@@ -82,17 +108,6 @@ function createCartItemElement(item) {
   return li;
 }
 
-function updateItemsTotalInTheIcon(cart) {
-  const totalItems = document.querySelector('.cart-icon-items-total');
-  if (cart.itemsTotal > 99) {
-    totalItems.textContent = '99+';
-  } else if (cart.itemsTotal < 1) {
-    totalItems.textContent = '';
-  } else {
-    totalItems.textContent = cart.itemsTotal;
-  }
-}
-
 function addItemInTheCart(event) {
   const itemID = getSkuFromProductItem(event.target.parentElement);
   const itemPromise = fetchItem(itemID);
@@ -108,6 +123,7 @@ function addItemInTheCart(event) {
     }
     updateItemsTotalInTheIcon(cart);
     updateTotalPrice(cart);
+    changeEmptyCartMessage(cart);
   });
 }
 
@@ -157,6 +173,7 @@ function fillItemsCart() {
   });
   updateItemsTotalInTheIcon(cart);
   updateTotalPrice(cart);
+  changeEmptyCartMessage(cart);
 }
 
 function addLoading() {
@@ -199,6 +216,7 @@ function emptyCart() {
   cart_Save(cart);
   updateItemsTotalInTheIcon(cart);
   cartItems.innerHTML = '';
+  changeEmptyCartMessage(cart);
 }
 
 function searchProducts() {
