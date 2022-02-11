@@ -180,7 +180,7 @@ function addLoading() {
   const itemsContainer = document.querySelector('.items');
   const loadingElement = document.createElement('div');
   loadingElement.className = 'loading';
-  loadingElement.textContent = 'Carregando...';
+  loadingElement.innerHTML = 'Carregando...<i class="material-icons md48 mobile-cart">shopping_cart</i>';
   itemsContainer.appendChild(loadingElement);
 }
 

@@ -1,0 +1,45 @@
+@keyframes move-cart {
+  0% {
+    margin-left: -48px;
+  }
+
+  20% {
+    transform: translateY(8.5%) rotateZ(0deg);
+  }
+
+  50% {
+    transform: translateY(8.5%) rotateZ(-30deg);
+  }
+
+  80% {
+    transform: translateY(8.5%) rotateZ(0deg);
+  }
+
+  100% {
+    margin-left: 100%;
+  }
+}
+
+.loading {
+  overflow: hidden;
+  width: 500px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+  font-family: Epilogue;
+}
+
+.loading::after {
+  content: '';
+  display: block;
+  border-bottom: 3px solid black;
+}
+
+.material-icons.md48.mobile-cart {
+  width: min-content;
+  display: block;
+  animation: move-cart 4s linear infinite;
+  transform: translateY(8.5%) rotateZ(0deg);
+  transform-origin: 29% 83.5%;
+  font-size: 48px;
+}

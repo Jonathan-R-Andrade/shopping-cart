@@ -90,7 +90,6 @@ body {
   margin: auto auto auto 0;
   background: rgb(10, 118, 79);
   transform: translateX(-50%) rotateZ(45deg);
-  z-index: 0;
   transition: background-color 500ms linear;
 }
 
@@ -235,6 +234,7 @@ body {
 
 .cart {
   position: fixed;
+  z-index: 1;
   top: 60px;
   right: -335px;
   background-color: rgb(241, 241, 238);
@@ -273,9 +273,10 @@ body {
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
-  font-family: Epilogue, Arial, Helvetica, sans-serif;
+  font-family: Epilogue;
   font-size: 28px;
   font-weight: 700;
+  text-align: center;
 }
 
 .material-icons.md-48 {
