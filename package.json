@@ -1,8 +1,5 @@
 {
-  "name": "sd-0x-project-shopping-cart",
-  "version": "1.0.0",
-  "description": "Você já usa o GitHub diariamente para desenvolver os exercícios, certo? Agora, para desenvolver os projetos, você deverá seguir as instruções a seguir. Fique atento a cada passo, e se tiver qualquer dúvida, nos envie por _Slack_! #vqv 🚀",
-  "main": "script.js",
+  "name": "shopping-cart",
   "scripts": {
     "test": "jest",
     "test:coverage": "jest --coverage",
@@ -21,16 +18,13 @@
       "**/tests/**/*.test.js?(x)"
     ]
   },
+  "homepage": "https://jonathan-r-andrade.github.io/shopping-cart",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/betrybe/sd-0x-project-shopping-cart.git"
+    "url": "https://github.com/jonathan-r-andrade/shopping-cart.git"
   },
-  "author": "",
+  "author": "Jonathan R. Andrade",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/betrybe/sd-0x-project-shopping-cart/issues"
-  },
-  "homepage": "https://github.com/betrybe/sd-0x-project-shopping-cart#readme",
   "devDependencies": {
     "jest": "24.9.0",
     "eslint-config-trybe-fundamentals": "1.1.0",
