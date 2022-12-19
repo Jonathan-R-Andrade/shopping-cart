@@ -9,9 +9,10 @@
   },
   "overrides": [
     {
-      "files": ["script.js"],
+      "files": ["script.js", "cart.js"],
       "rules": {
-        "no-undef": "off"
+        "no-undef": "off",
+        "no-param-reassign": "off"
       }
     }
   ],
