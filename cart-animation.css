@@ -1,4 +1,5 @@
 @keyframes move-cart {
+
   0% {
     margin-left: -48px;
   }
@@ -29,7 +30,7 @@
   font-family: Epilogue, Arial, Helvetica, sans-serif;
 }
 
-.loading::after {
+.loading:after {
   content: '';
   display: block;
   border-bottom: 3px solid black;
