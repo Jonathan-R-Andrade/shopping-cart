@@ -69,3 +69,13 @@ function removeItemFromCart(id, cart, quantity) {
   }
   return foundItem;
 }
+
+if (typeof module === 'object') {
+  module.exports = {
+    createCart,
+    saveCart,
+    getCart,
+    addItemToCart,
+    removeItemFromCart,
+  };
+}
