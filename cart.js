@@ -7,15 +7,13 @@ function createItem(item, quantity, totalPrice) {
 }
 
 function verifyCart(cart) {
-  if (typeof cart === 'object') {
-    const modelCartKyes = Object.keys(createCart());
-    const cartKyes = Object.keys(cart);
-    if (modelCartKyes.length !== cartKyes.length) return false;
-    if (!cartKyes.every((key, index) => key === modelCartKyes[index])) return false;
-    if (!Array.isArray(cart.items)) return false;
-    return true;
-  }
-  return false;
+  if (typeof cart !== 'object') return false;
+  const modelCartKyes = Object.keys(createCart());
+  const cartKyes = Object.keys(cart);
+  if (modelCartKyes.length !== cartKyes.length) return false;
+  if (!cartKyes.every((key, index) => key === modelCartKyes[index])) return false;
+  if (!Array.isArray(cart.items)) return false;
+  return true;
 }
 
 function saveCart(cart) {
