@@ -1,5 +1,4 @@
 const cartItems = document.querySelector('.cart__items');
-cartItems.addEventListener('click', removeItemInTheCart);
 
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
@@ -33,11 +32,6 @@ function updateItemsTotalInTheIcon(cart) {
   }
 }
 
-function updateTotalPrice(cart) {
-  const totalPrice = document.querySelector('.total-price__container');
-  totalPrice.outerHTML = createPriceContainer(cart.totalPrice, 'total-price').outerHTML;
-}
-
 function changeEmptyCartMessage(cart) {
   if (cart.itemsTotal > 0) {
     document.querySelector('.cart__items__container')
@@ -50,6 +44,55 @@ function changeEmptyCartMessage(cart) {
     document.querySelector('.empty__cart__message__container')
       .style.display = 'flex';
   }
+}
+
+function createCartItemQuantityElement(quantity) {
+  const itemQuantityContainer = createCustomElement('span', 'item__quantity__container', '');
+  const itemQuantity = createCustomElement('span', 'item__quantity', quantity);
+  const itemQuantityText = createCustomElement('span', 'item__quantity-text', '');
+  itemQuantityText.innerHTML = (quantity > 1) ? 'itens' : 'item';
+  itemQuantityContainer.appendChild(itemQuantity);
+  itemQuantityContainer.appendChild(itemQuantityText);
+  return itemQuantityContainer;
+}
+
+function thousandsSeparator(integerNumber) {
+  const numbers = String(integerNumber).split('');
+  const lastIndex = numbers.length - 1;
+  numbers.reverse();
+  const numberSeparated = [numbers[0]];
+  for (let index = 1; index < numbers.length; index += 1) {
+    numberSeparated.unshift(numbers[index]);
+    if ((index + 1) % 3 === 0 && index < lastIndex) numberSeparated.unshift('.');
+  }
+  return numberSeparated.join('');
+}
+
+function createPriceContainer(price, className) {
+  const priceSeparated = String(price).split('.');
+  const priceInteger = thousandsSeparator(priceSeparated[0]);
+  let priceCents = priceSeparated[1];
+  priceCents = (priceCents) ? `${priceCents}00`.slice(0, 2) : '00';
+
+  const priceContainer = createCustomElement('span', `${className}__container`, '');
+  priceContainer.appendChild(createCustomElement('span', `${className}__symbol`, 'R$'));
+  priceContainer.appendChild(createCustomElement('span', `${className}__integer`, priceInteger));
+  priceContainer.appendChild(createCustomElement('span', `${className}__decimal_separator`, ','));
+  priceContainer.appendChild(createCustomElement('span', `${className}__cents`, priceCents));
+  return priceContainer;
+}
+
+function updateTotalPrice(cart) {
+  const totalPrice = document.querySelector('.total-price__container');
+  totalPrice.outerHTML = createPriceContainer(cart.totalPrice, 'total-price').outerHTML;
+}
+
+function updateCartItem(item) {
+  const itemElement = document.querySelector(`#${item.item.id}`);
+  const itemQuantity = itemElement.querySelector('.item__quantity__container');
+  itemQuantity.outerHTML = createCartItemQuantityElement(item.quantity).outerHTML;
+  const itemPrice = itemElement.querySelector('.item__price__container');
+  itemPrice.outerHTML = createPriceContainer(item.totalPrice, 'item__price').outerHTML;
 }
 
 function removeItemInTheCart(event) {
@@ -67,24 +110,6 @@ function removeItemInTheCart(event) {
     updateTotalPrice(cart);
     changeEmptyCartMessage(cart);
   }
-}
-
-function createCartItemQuantityElement(quantity) {
-  const itemQuantityContainer = createCustomElement('span', 'item__quantity__container', '');
-  const itemQuantity = createCustomElement('span', 'item__quantity', quantity);
-  const itemQuantityText = createCustomElement('span', 'item__quantity-text', '');
-  itemQuantityText.innerHTML = (quantity > 1) ? 'itens' : 'item';
-  itemQuantityContainer.appendChild(itemQuantity);
-  itemQuantityContainer.appendChild(itemQuantityText);
-  return itemQuantityContainer;
-}
-
-function updateCartItem(item) {
-  const itemElement = document.querySelector(`#${item.item.id}`);
-  const itemQuantity = itemElement.querySelector('.item__quantity__container');
-  itemQuantity.outerHTML = createCartItemQuantityElement(item.quantity).outerHTML;
-  const itemPrice = itemElement.querySelector('.item__price__container');
-  itemPrice.outerHTML = createPriceContainer(item.totalPrice, 'item__price').outerHTML;
 }
 
 function createCartItemElement(item) {
@@ -127,32 +152,6 @@ function addItemInTheCart(event) {
   });
 }
 
-function thousandsSeparator(integerNumber) {
-  const numbers = String(integerNumber).split('');
-  const lastIndex = numbers.length - 1;
-  numbers.reverse();
-  const numberSeparated = [numbers[0]];
-  for (let index = 1; index < numbers.length; index += 1) {
-    numberSeparated.unshift(numbers[index]);
-    if ((index + 1) % 3 === 0 && index < lastIndex) numberSeparated.unshift('.');
-  }
-  return numberSeparated.join('');
-}
-
-function createPriceContainer(price, className) {
-  const priceSeparated = String(price).split('.');
-  const priceInteger = thousandsSeparator(priceSeparated[0]);
-  let priceCents = priceSeparated[1];
-  priceCents = (priceCents) ? `${priceCents}00`.slice(0, 2) : '00';
-
-  const priceContainer = createCustomElement('span', `${className}__container`, '');
-  priceContainer.appendChild(createCustomElement('span', `${className}__symbol`, 'R$'));
-  priceContainer.appendChild(createCustomElement('span', `${className}__integer`, priceInteger));
-  priceContainer.appendChild(createCustomElement('span', `${className}__decimal_separator`, ','));
-  priceContainer.appendChild(createCustomElement('span', `${className}__cents`, priceCents));
-  return priceContainer;
-}
-
 function createProductItemElement({ id, title, pictures, price }) {
   const section = createCustomElement('section', 'item', '');
   section.appendChild(createCustomElement('span', 'item__sku', id));
@@ -180,7 +179,8 @@ function addLoading() {
   const itemsContainer = document.querySelector('.items');
   const loadingElement = document.createElement('div');
   loadingElement.className = 'loading';
-  loadingElement.innerHTML = 'Carregando...<i class="material-icons md48 mobile-cart">shopping_cart</i>';
+  loadingElement
+    .innerHTML = 'Carregando...<i class="material-icons md48 mobile-cart">shopping_cart</i>';
   itemsContainer.appendChild(loadingElement);
 }
 
@@ -225,29 +225,23 @@ function searchProducts() {
 }
 
 function addSearchClickEvent() {
-  document.getElementById('search_product')
-    .addEventListener('keypress', (event) => {
-      if (event.key === 'Enter') searchProducts();
-    });
-  document.querySelector('#icon-search')
-    .addEventListener('click', searchProducts);
+  document.getElementById('search_product').addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') searchProducts();
+  });
+  document.querySelector('#icon-search').addEventListener('click', searchProducts);
 }
 
 function showCartItems() {
-  document.querySelector('.cart__title')
-    .classList.toggle('cart__title-open');
-  document.querySelector('.container-cartTitle')
-    .classList.toggle('container-cartTitle-open');
-  document.querySelector('.cart')
-    .classList.toggle('cart-open');
+  document.querySelector('.cart__title').classList.toggle('cart__title-open');
+  document.querySelector('.container-cartTitle').classList.toggle('container-cartTitle-open');
+  document.querySelector('.cart').classList.toggle('cart-open');
 }
 
 window.onload = () => {
   addSearchClickEvent();
-  document.querySelector('.empty-cart')
-    .addEventListener('click', emptyCart);
-  document.querySelector('.material-icons.cart-icon')
-    .addEventListener('click', showCartItems);
+  document.querySelector('.empty-cart').addEventListener('click', emptyCart);
+  document.querySelector('.material-icons.cart-icon').addEventListener('click', showCartItems);
+  cartItems.addEventListener('click', removeItemInTheCart);
   fillItemsCart();
   showItemsSearched('computador');
 };
