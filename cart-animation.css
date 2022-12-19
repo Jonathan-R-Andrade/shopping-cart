@@ -26,7 +26,7 @@
   text-align: center;
   font-size: 30px;
   font-weight: 600;
-  font-family: Epilogue;
+  font-family: Epilogue, Arial, Helvetica, sans-serif;
 }
 
 .loading::after {
