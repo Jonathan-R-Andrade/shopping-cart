@@ -1,14 +1,14 @@
-function cart_CreateCart() {
+function createCart() {
   return { items: [], totalPrice: 0, itemsTotal: 0 };
 }
 
-function cart_CreateItem(item, quantity, totalPrice) {
+function createItem(item, quantity, totalPrice) {
   return { item, quantity, totalPrice };
 }
 
-function cart_Verify(cart) {
+function verifyCart(cart) {
   if (typeof cart === 'object') {
-    const modelCartKyes = Object.keys(cart_CreateCart());
+    const modelCartKyes = Object.keys(createCart());
     const cartKyes = Object.keys(cart);
     if (modelCartKyes.length !== cartKyes.length) return false;
     if (!cartKyes.every((key, index) => key === modelCartKyes[index])) return false;
@@ -18,20 +18,20 @@ function cart_Verify(cart) {
   return false;
 }
 
-function cart_Save(cart) {
+function saveCart(cart) {
   saveCartItems(JSON.stringify(cart));
 }
 
-function cart_Get() {
+function getCart() {
   try {
     const cart = JSON.parse(getSavedCartItems());
-    return (cart_Verify(cart)) ? cart : cart_CreateCart();
+    return (verifyCart(cart)) ? cart : createCart();
   } catch (error) {
-    return cart_CreateCart();
+    return createCart();
   }
 }
 
-function cart_AddItem(itemToAdd, cart, quantity) {
+function addItemToCart(itemToAdd, cart, quantity) {
   const { items } = cart;
   let foundItem = items.find(({ item }) => item.id === itemToAdd.id);
   const priceToAdd = itemToAdd.price * quantity;
@@ -39,7 +39,7 @@ function cart_AddItem(itemToAdd, cart, quantity) {
     foundItem.quantity += quantity;
     foundItem.totalPrice += priceToAdd;
   } else {
-    const newItem = cart_CreateItem(itemToAdd, quantity, priceToAdd);
+    const newItem = createItem(itemToAdd, quantity, priceToAdd);
     items.push(newItem);
     foundItem = newItem;
   }
@@ -50,7 +50,7 @@ function cart_AddItem(itemToAdd, cart, quantity) {
   return foundItem;
 }
 
-function cart_RemoveItem(id, cart, quantity) {
+function removeItemFromCart(id, cart, quantity) {
   const { items } = cart;
   let foundItem = items.find(({ item }) => item.id === id);
   if (foundItem) {

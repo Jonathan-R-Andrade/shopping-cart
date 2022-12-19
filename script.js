@@ -98,14 +98,14 @@ function updateCartItem(item) {
 function removeItemInTheCart(event) {
   if (event.target.classList.contains('cart__item__delete')) {
     const item = event.target.parentElement.parentElement;
-    const cart = cart_Get();
-    const itemInCart = cart_RemoveItem(item.id, cart, 1);
+    const cart = getCart();
+    const itemInCart = removeItemFromCart(item.id, cart, 1);
     if (itemInCart) {
       updateCartItem(itemInCart);
     } else {
       item.remove();
     }
-    cart_Save(cart);
+    saveCart(cart);
     updateItemsTotalInTheIcon(cart);
     updateTotalPrice(cart);
     changeEmptyCartMessage(cart);
@@ -137,9 +137,9 @@ function addItemInTheCart(event) {
   const itemID = getSkuFromProductItem(event.target.parentElement);
   const itemPromise = fetchItem(itemID);
   itemPromise.then((item) => {
-    const cart = cart_Get();
-    const itemInCart = cart_AddItem(item, cart, 1);
-    cart_Save(cart);
+    const cart = getCart();
+    const itemInCart = addItemToCart(item, cart, 1);
+    saveCart(cart);
     if (itemInCart.quantity > 1) {
       updateCartItem(itemInCart);
     } else {
@@ -165,7 +165,7 @@ function createProductItemElement({ id, title, pictures, price }) {
 }
 
 function fillItemsCart() {
-  const cart = cart_Get();
+  const cart = getCart();
   cart.items.forEach((item) => {
     const itemElemetn = createCartItemElement(item);
     cartItems.appendChild(itemElemetn);
@@ -212,8 +212,8 @@ function showItemsSearched(search) {
 function emptyCart() {
   const totalPrice = document.querySelector('.total-price__container');
   totalPrice.outerHTML = createPriceContainer(0, 'total-price').outerHTML;
-  const cart = cart_CreateCart();
-  cart_Save(cart);
+  const cart = createCart();
+  saveCart(cart);
   updateItemsTotalInTheIcon(cart);
   cartItems.innerHTML = '';
   changeEmptyCartMessage(cart);
