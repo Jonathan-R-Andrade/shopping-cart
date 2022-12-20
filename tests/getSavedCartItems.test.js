@@ -1,5 +1,5 @@
 const localStorageSimulator = require('../mocks/localStorageSimulator');
-const getSavedCartItems = require('../helpers/getSavedCartItems');
+const getSavedCartItems = require('../src/js/helpers/getSavedCartItems');
 
 localStorageSimulator('getItem');
 
