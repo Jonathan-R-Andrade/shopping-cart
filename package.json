@@ -26,8 +26,9 @@
   "author": "Jonathan R. Andrade",
   "license": "ISC",
   "devDependencies": {
-    "jest": "24.9.0",
     "eslint-config-trybe-fundamentals": "1.1.0",
+    "gh-pages": "^4.0.0",
+    "jest": "24.9.0",
     "stylelint": "13.8.0",
     "stylelint-config-standard": "20.0.0"
   }
