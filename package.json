@@ -12,7 +12,7 @@
       "html"
     ],
     "collectCoverageFrom": [
-      "**/helpers/**"
+      "src/js/helpers/**"
     ],
     "testMatch": [
       "**/tests/**/*.test.js?(x)"
